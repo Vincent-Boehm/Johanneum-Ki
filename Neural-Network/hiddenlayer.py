@@ -1,6 +1,6 @@
-import neuron
+import hiddenneuron
 
-class layer():
+class hiddenlayer():
     """Beschriebt eine "Schicht des Neuralen Netzwerks"
     """
     def __init__(self,depth,neuron_number,input_list,weight_list,bias_list) -> None:
@@ -23,4 +23,4 @@ class layer():
         
         #Generiert Neuronen
         for number in range(self.neuron_number):
-            self.neurons[number] = neuron.neuron(self.input_list[number],self.weight_list[number],self.bias_list[number])
+            self.neurons.append(hiddenneuron.neuron(self.input_list[number],self.weight_list[number],self.bias_list[number]))
