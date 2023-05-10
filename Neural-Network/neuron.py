@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-import numpy as np 
 
 class neuron():
     """Ein Neuron, had eine liste von eingaben, und eine liste von gewichten und eine Voreingenommenheit. Dammit rechnen wir dann denn ausgangs wert."""
