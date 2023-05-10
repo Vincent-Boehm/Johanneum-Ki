@@ -1,8 +1,13 @@
-from dataclasses import dataclass
-
 class neuron():
-    """Ein Neuron, had eine liste von eingaben, und eine liste von gewichten und eine Voreingenommenheit. Dammit rechnen wir dann denn ausgangs wert."""
+    """Ein Neuron, had eine liste von eingaben, und eine liste von gewichten und eine Voreingenommenheit. Dammit rechnen wir dann denn ausgangs wert.
+    """
     def __init__(self,inputs: list, weights: list,bias:float) -> None:
+        """
+        Args:
+            inputs (list): Liste der Eingaben von anderen Neuronen, kann -1 bis 1 sein
+            weights (list): Liste der Gewichtiungen der werte der anderen Neuronen, kann 1 bis -1 sein
+            bias (float): Voreingenommenheit des Neuronens
+        """
         self.inputs = inputs
         self.weights = weights
         self.output = 0
