@@ -1,7 +1,7 @@
 class neuron():
     """Ein Neuron, had eine liste von eingaben, und eine liste von gewichten und eine Voreingenommenheit. Dammit rechnen wir dann denn ausgangs wert.
     """
-    def __init__(self,inputs: list, weights: list,bias:float) -> None:
+    def __init__(self,inputs: list) -> None:
         """
         Args:
             inputs (list): Liste der Eingaben von anderen Neuronen, kann -1 bis 1 sein
@@ -9,7 +9,7 @@ class neuron():
             bias (float): Voreingenommenheit des Neuronens
         """
         self.inputs = inputs
-        self.weights = weights
+        self.weights = 0
         self.output = 0
         self.bias = bias
     
@@ -18,5 +18,6 @@ class neuron():
         """
         for input,weight in zip(self.inputs,self.weights):
             self.output += input * weight + self.bias
-        #Sigmoid Funktion
-        self.output = 1/(1+pow(2.718281828459045,-self.output))
+            
+            #Sigmoid Funktion
+            self.output = 1/(1+pow(2.718281828459045,-self.output))

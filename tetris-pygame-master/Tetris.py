@@ -1,5 +1,13 @@
-import random
-import pygame
+import random;
+import pygame;
+
+import sys
+import os;
+
+sys.path.append('C:\\Users\\Vodu\\Desktop\\New folder\\KI-AG-TetrisKi\\Neural-Network')
+
+import network
+import inputLayer
 
 """
 10 x 20 grid
@@ -167,7 +175,8 @@ def create_grid(locked_pos={}):
                 color = locked_pos[
                     (x, y)]  # get the value color (r,g,b) from the locked_positions dictionary using key (x,y)
                 grid[y][x] = color  # set grid position to color
-
+    os.system("cls")
+    print(grid)
     return grid
 
 
@@ -227,7 +236,7 @@ def get_shape():
 
 # draws text in the middle
 def draw_text_middle(text, size, color, surface):
-    font = pygame.font.Font(fontpath, size, bold=False, italic=True)
+    font = pygame.font.Font(fontpath, size)
     label = font.render(text, 1, color)
 
     surface.blit(label, (top_left_x + play_width/2 - (label.get_width()/2), top_left_y + play_height/2 - (label.get_height()/2)))
@@ -306,7 +315,7 @@ def draw_window(surface, grid, score=0, last_score=0):
     surface.fill((0, 0, 0))  # fill the surface with black
 
     pygame.font.init()  # initialise font
-    font = pygame.font.Font(fontpath_mario, 65, bold=True)
+    font = pygame.font.Font(fontpath_mario, 65)
     label = font.render('TETRIS', 1, (255, 255, 255))  # initialise 'Tetris' text with white
 
     surface.blit(label, ((top_left_x + play_width / 2) - (label.get_width() / 2), 30))  # put surface on the center of the window
@@ -366,11 +375,17 @@ def get_max_score():
 
     return score
 
+grid = None
+score = None
 
 def main(window):
     locked_positions = {}
     create_grid(locked_positions)
-
+    #Johanneum KI erstellen.
+    inputLayer = inputLayer.inputLayer()
+    
+    network.neuralNetwork(1,2,inputLayer)
+    
     change_piece = False
     run = True
     current_piece = get_shape()
