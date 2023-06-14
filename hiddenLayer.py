@@ -3,10 +3,8 @@ import neuron
 import numpy
 
 class layer:
-    def __init__(self,size,depth,isLast) -> None:
+    def __init__(self,size) -> None:
         self.neurons = []
-        self.depth = depth
-        self.isLast = isLast
         
         self.output = []
         
@@ -14,6 +12,7 @@ class layer:
             self.neurons.append(neuron.neuron())
         
     def calc_out(self,inputs):
+        self.output = []
         for x in range(len(self.neurons)):
             self.neurons[x].calc_output(inputs)
             self.output.append(self.neurons[x].output)

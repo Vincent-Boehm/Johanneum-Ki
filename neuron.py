@@ -11,6 +11,4 @@ class neuron:
         self.output = 0
         
     def calc_output(self,inputs):
-        self.output =  1/(1+(numpy.exp(-(numpy.dot(inputs,self.weights)))))
-        
-        
+        self.output =  1/(1+(numpy.exp(-(numpy.tensordot(self.weights, inputs,axes=0)))))
