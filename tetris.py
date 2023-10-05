@@ -25,9 +25,8 @@ testNetwork = network.network(20, 4)
 
 while not pyboy.tick():
     buffer = pyboy.botsupport_manager().screen().screen_ndarray()
-    screen = np.hstack(np.hstack(buffer))
-    print(screen)
-    testNetwork.calcNetworkOutput(screen)
+    print(buffer)
+    testNetwork.calcNetworkOutput(buffer)
     if testNetwork.hiddenLayers[3].output[0] >= 0.5:
         pyboy.send_input(WindowEvent.PRESS_ARROW_RIGHT)
     if testNetwork.hiddenLayers[3].output[1] >= 0.5:

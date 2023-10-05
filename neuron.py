@@ -6,9 +6,11 @@ class neuron:
     
     def __init__(self) -> None:
         
-        self.weights = numpy.random.rand(6)
-        print(self.weights)
+        self.weight = random.randrange(0.5,1.5)
+
+        self.bias = random.randrange(-1,1) 
+
         self.output = 0
         
-    def calc_output(self,inputs):
-        self.output =  1/(1+(numpy.exp(-(numpy.tensordot(self.weights, inputs,axes=0)))))
+    def calc_output(self,input):
+        self.output =  1/(1+(numpy.exp(self.weight * input + self.bias)))
