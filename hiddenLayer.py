@@ -6,18 +6,21 @@ class layer:
     def __init__(self,size) -> None:
         self.neurons = []
         
-        self.output = []
+        self.output = numpy.empty(1)
         
         for x in range(size):
             self.neurons.append(neuron.neuron())
         
     def calc_out(self,inputs):
-        self.output = []
-        for x in range(len(self.neurons)):
-            self.neurons[x].calc_output(inputs)
-            self.output.append(self.neurons[x].output)
-    
+        
+        inputs = numpy.reshape(inputs,(1,-1))
+        
+        self.output = numpy.empty(1,dtype=numpy.float16)
+        
+        for x in range(0,len(self.neurons)):
+            self.neurons[x].calc_output(1)
+            self.output = numpy.append(self.output,self.neurons[x].output,axis=None)
+            
     def back_prop(self,toChange):
-        for i in range(len(self.neurons)):
-            for j in range(len(self.neurons[i].weights)):
-                self.neurons[i].weights[j] *= toChange
+        pass
+        ##Todo
