@@ -42,7 +42,7 @@ testNetwork = network.network(2304, 4)
 # line1, = ax.plot(0, 0)
 while not pyboy.tick():
     
-    frames += 1
+   # frames += 1
     
     buffer = pyboy.botsupport_manager().screen().screen_ndarray()
     
