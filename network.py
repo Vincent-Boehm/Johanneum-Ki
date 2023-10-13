@@ -1,5 +1,4 @@
 import hiddenLayer
-import neuron
 
 import numpy
 
