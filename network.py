@@ -1,42 +1,33 @@
-import hiddenLayer
-import neuron
-
-import numpy
+import numpy as np
 
 class network:
-    def __init__(self,neuronPerLayer,amountOfLayers) -> None:
-
-        self.neuronPerLayer = neuronPerLayer
-        self.amountOfLayers = amountOfLayers
+    def __init__(self) -> None:
+        self.layers = 5
         
-        self.hiddenLayers = []
-        self.inputLayer = []
-        self.outputLayer = []
-        
-        self.newBuffer = []
-
-        # Create Input Layer
-        self.inputLayer.append(hiddenLayer.layer(self.neuronPerLayer))
-
-        #Create Hidden Layers
-        for i in range(self.amountOfLayers):
-            self.hiddenLayers.append(hiddenLayer.layer(self.neuronPerLayer))
-
-    def calcNetworkOutput(self,screen):
-        self.newBuffer = []
-        
-        for pixel in screen:
-            if numpy.mean(screen[pixel]) > 0:
-                self.newBuffer.append(1)
-            else:
-                self.newBuffer.append(0)
-        
-        self.newBuffer = numpy.reshape(self.newBuffer,(self.amountOfLayers,-1))
+        self.weights1 = np.random.rand(18,10) + 0.5
+        self.weights2 = np.random.rand(18,10) + 0.5
+        self.weights3 = np.random.rand(18,10) + 0.5
+        self.weights4 = np.random.rand(18,10) + 0.5
+        self.weights5 = np.random.rand(18,10) + 0.5
+        pass    
+    
+    def calculateOutput(self,input:np.ndarray) -> np.ndarray:
+        activationFunction = np.vectorize(lambda x: 1/1-np.e**-x)
         
         
-        for i in range(len(self.hiddenLayers)):
-            if i == 0:
-                self.hiddenLayers[i].calc_out(inputs=self.newBuffer[i])
-            self.hiddenLayers[i].calc_out(inputs=self.hiddenLayers[i-1].output)
-        pass
-
+        hiddenlayers = input * self.weights1
+        hiddenlayers = activationFunction(hiddenlayers)
+        
+        hiddenlayers = hiddenlayers * self.weights2
+        hiddenlayers = activationFunction(hiddenlayers)
+        
+        hiddenlayers = hiddenlayers * self.weights3
+        hiddenlayers = activationFunction(hiddenlayers)
+        
+        hiddenlayers = hiddenlayers * self.weights4
+        hiddenlayers = activationFunction(hiddenlayers)
+        
+        hiddenlayers = hiddenlayers * self.weights5
+        hiddenlayers = activationFunction(hiddenlayers)
+        
+        return hiddenlayers

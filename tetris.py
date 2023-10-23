@@ -2,87 +2,38 @@ import os
 
 import sys
 
-import matplotlib.pyplot as plt
-
-import matplotlib as mpl
-
-#import json
-
-import network
+from pyboy import PyBoy, WindowEvent, botsupport
 
 import numpy as np
 
-import outPutNeuron
-
-wantedScore = 100
-
-from pyboy import PyBoy,WindowEvent, botsupport
-
-filename = "Tetris.gb"
+import network
 
 pyboy = PyBoy(gamerom_file="Tetris.gb",game_wrapper=True)
+pyboy.set_emulation_speed(0)
 
+assert pyboy.cartridge_title() == "TETRIS"
 
 tetris = pyboy.game_wrapper()
-tetris.start_game()
 
-testNetwork = network.network(2304, 4)
+tetris.start_game(timer_div=0) 
 
-
-
-# fig, ax = plt.subplots()
-
-    
-# plt.show()
+neuralNetwork = network.network()
 
 
-# frames = 0
-
-
-# line1, = ax.plot(0, 0)
+ticks:int = 0
 while not pyboy.tick():
+    ticks += 1
     
-   # frames += 1
+    #print(np.array(tetris.game_area()))
     
-    buffer = pyboy.botsupport_manager().screen().screen_ndarray()
-    
-    pyboy.set_emulation_speed(3)
-    
-    buffer = buffer.reshape(buffer.shape[0]*buffer.shape[1],buffer.shape[2])
-    
-    
-    buffer = buffer[1::10]
-    
-    
-    testNetwork.calcNetworkOutput(buffer)
-    
-    outputRight = outPutNeuron.neuron()
-    outputLeft = outPutNeuron.neuron()
-    outputDown = outPutNeuron.neuron()
-    outputA = outPutNeuron.neuron()
-    
-    
-    outputRight.calc_output(testNetwork.hiddenLayers[-1].output)
-    outputLeft.calc_output(testNetwork.hiddenLayers[-1].output)
-    outputDown.calc_output(testNetwork.hiddenLayers[-1].output)
-    outputA.calc_output(testNetwork.hiddenLayers[-1].output)
-    
-    # # line1.set_xdata(frames)
-    # # line1.set_ydata(outputRight.output.mean())
-    # # plt.ion()
-    
-    # fig.canvas.draw()
-    
-    
-    
-    if outputRight.output.mean() > 0.5:
-        pyboy.send_input(WindowEvent.PRESS_ARROW_RIGHT)
-    if outputLeft.output.mean() > 0.5:
-        pyboy.send_input(WindowEvent.PRESS_ARROW_LEFT)
-    if outputDown.output.mean() > 0.5:
-        pyboy.send_input(WindowEvent.PRESS_ARROW_DOWN)
-    if outputA.output.mean() > 0.5:
-        pyboy.send_input(WindowEvent.PRESS_BUTTON_A)
+    if ticks % 24:
+        gameArea = np.array(tetris.game_area(),dtype=np.uint32)
+        
+        gameArea = (gameArea-np.min(gameArea))/(np.max(gameArea)-np.min(gameArea))
 
         
-pyboy.stop()
+        print(neuralNetwork.calculateOutput(gameArea))
+        
+        
+        pass
+    
