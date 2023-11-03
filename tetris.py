@@ -12,7 +12,7 @@ import network
 
 import numpy as np
 
-import outPutNeuron
+import jsonpickle
 
 wantedScore = 100
 
@@ -22,15 +22,25 @@ filename = "Tetris.gb"
 
 pyboy = PyBoy(gamerom_file="Tetris.gb",game_wrapper=True)
 
+networkName = "jarvis.json"
 
 tetris = pyboy.game_wrapper()
 tetris.start_game()
 
 pyboy.set_emulation_speed(0)
 
-testNetwork = network.network(5, 3)
+if os.path.exists(networkName) == False:
+    testNetwork = network.network(4, 3)
+else:
+    with open(networkName,"r+") as file:
+        testNetwork = jsonpickle.decode(file.read)[0]
+        
+fig,ax = plt.subplots()
+
+ticks = 0
 
 while not pyboy.tick():
+    ticks += 1
     
     buffer = np.array( tetris.game_area())
     
@@ -40,7 +50,46 @@ while not pyboy.tick():
     
     testNetwork.calcNetworkOutput(buffer)
     
-    print(testNetwork.output)
-
+    pyboy.send_input(WindowEvent.RELEASE_ARROW_LEFT)
+    pyboy.send_input(WindowEvent.RELEASE_ARROW_RIGHT)
+    pyboy.send_input(WindowEvent.RELEASE_ARROW_DOWN)
+    pyboy.send_input(WindowEvent.RELEASE_BUTTON_A)
+    
+    if testNetwork.output[0]>= 0.5:
+        pyboy.send_input(WindowEvent.PRESS_ARROW_LEFT)
+        
+    if testNetwork.output[1] >= 0.5:
+        pyboy.send_input(WindowEvent.PRESS_ARROW_RIGHT)
+        
+    if testNetwork.output[2] >= 0.5:
+        pyboy.send_input(WindowEvent.PRESS_ARROW_DOWN)
+        
+    if testNetwork.output[3] >= 0.5:
+        pyboy.send_input(WindowEvent.PRESS_BUTTON_A)
+        
+    if tetris.game_over():
+        testNetwork.fitness = tetris.score + (ticks / 6000)
+        
+        if os.path.exists(networkName) == False:
+            with open(networkName,"w+") as file:
+                
+                toWrite = []
+                toWrite.append(testNetwork)
+                file.write(jsonpickle.encode(toWrite))
+        else:
+            with open(networkName,"r+") as file:
+                
+                toWrite = jsonpickle.decode(file.read())
+                toWrite.append(testNetwork)
+                
+                toWrite.sort(key=lambda x: x.fitness)
+                
+                file.truncate(0)
+                
+                file.write(jsonpickle.encode(toWrite))
+                
+                testNetwork = toWrite[0]
+            
+        tetris.reset_game(timer_div=0)
         
 pyboy.stop()

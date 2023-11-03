@@ -4,11 +4,10 @@ import random
 
 import math
 
-class neuron:
+class inputneuron:
     
     def __init__(self) -> None:
-        self.weights = numpy.random.uniform(-2,2,(4))
-        
+        self.weights = numpy.random.uniform(-2,2,(180))
         
     def calc_output(self,input:numpy.ndarray) -> float:
         input = input.flatten()

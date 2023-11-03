@@ -11,8 +11,10 @@ class network:
         
         self.hiddenLayers = []
         
+        self.fitness = 0
         
         self.output = []
+        
         self.outputNeuron0 = neuron.neuron()
         self.outputNeuron1 = neuron.neuron()
         self.outputNeuron2 = neuron.neuron()
@@ -20,17 +22,21 @@ class network:
 
         #Create Hidden Layers
         for i in range(self.amountOfLayers):
-            self.hiddenLayers.append(hiddenLayer.layer(self.neuronPerLayer))
+            if i == 0:
+                self.hiddenLayers.append(hiddenLayer.layer(self.neuronPerLayer,isInput=True))
+            else:
+                self.hiddenLayers.append(hiddenLayer.layer(self.neuronPerLayer))
 
-    def calcNetworkOutput(self,screen):
+    def calcNetworkOutput(self,screen:numpy.ndarray):
         
+        self.output = []
         
         for i in range(len(self.hiddenLayers)):
             if i == 0:
                 self.hiddenLayers[i].calc_out(screen)
-            self.hiddenLayers[i].calc_out(inputs=self.hiddenLayers[i-1].output)
+            else:
+                self.hiddenLayers[i].calc_out(inputs=self.hiddenLayers[i-1].output)
 
-        self.output = []
         
         self.output.append(self.outputNeuron0.calc_output(self.hiddenLayers[-1].output))
         self.output.append(self.outputNeuron1.calc_output(self.hiddenLayers[-1].output))

@@ -2,24 +2,31 @@ import neuron
 
 import numpy
 
+import InputNeuron
+
 class layer:
-    def __init__(self,size) -> None:
+    def __init__(self,size,isInput=False) -> None:
         self.neurons = []
         
-        self.output = numpy.empty(1)
+        self.output = []
+        if isInput == False:
+            for x in range(size):
+                self.neurons.append(neuron.neuron())
+        else:
+            for x in range(size):
+                self.neurons.append(InputNeuron.inputneuron())
         
-        for x in range(size):
-            self.neurons.append(neuron.neuron())
-        
-    def calc_out(self,inputs):
+    def calc_out(self,inputs:numpy.ndarray):
         
         inputs.flatten()
         
-        self.output = numpy.empty(1,dtype=numpy.float16)
+        self.output = []
+        self.output = numpy.array(self.output)
         
         for x in range(0,len(self.neurons)):
-            numpy.append(self.output,self.neurons[x].calc_output(inputs))
+            self.output = numpy.append(self.output,self.neurons[x].calc_output(inputs))
 
+        
     def back_prop(self,toChange):
         pass
         ##Todo
