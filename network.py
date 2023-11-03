@@ -10,33 +10,32 @@ class network:
         self.amountOfLayers = amountOfLayers
         
         self.hiddenLayers = []
-        self.inputLayer = []
-        self.outputLayer = []
         
-        self.newBuffer = []
-
-        # Create Input Layer
-        self.inputLayer.append(hiddenLayer.layer(self.neuronPerLayer))
+        
+        self.output = []
+        self.outputNeuron0 = neuron.neuron()
+        self.outputNeuron1 = neuron.neuron()
+        self.outputNeuron2 = neuron.neuron()
+        self.outputNeuron3 = neuron.neuron()
 
         #Create Hidden Layers
         for i in range(self.amountOfLayers):
             self.hiddenLayers.append(hiddenLayer.layer(self.neuronPerLayer))
 
     def calcNetworkOutput(self,screen):
-        self.newBuffer = []
-        
-        for pixel in screen:
-            if numpy.mean(screen[pixel]) > 0:
-                self.newBuffer.append(1)
-            else:
-                self.newBuffer.append(0)
-        
-        self.newBuffer = numpy.reshape(self.newBuffer,(self.amountOfLayers,-1))
         
         
         for i in range(len(self.hiddenLayers)):
             if i == 0:
-                self.hiddenLayers[i].calc_out(inputs=self.newBuffer[i])
+                self.hiddenLayers[i].calc_out(screen)
             self.hiddenLayers[i].calc_out(inputs=self.hiddenLayers[i-1].output)
+
+        self.output = []
+        
+        self.output.append(self.outputNeuron0.calc_output(self.hiddenLayers[-1].output))
+        self.output.append(self.outputNeuron1.calc_output(self.hiddenLayers[-1].output))
+        self.output.append(self.outputNeuron2.calc_output(self.hiddenLayers[-1].output))
+        self.output.append(self.outputNeuron3.calc_output(self.hiddenLayers[-1].output))
+        
         pass
 

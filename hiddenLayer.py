@@ -13,14 +13,13 @@ class layer:
         
     def calc_out(self,inputs):
         
-        inputs = numpy.reshape(inputs,(1,-1))
+        inputs.flatten()
         
         self.output = numpy.empty(1,dtype=numpy.float16)
         
         for x in range(0,len(self.neurons)):
-            self.neurons[x].calc_output(1)
-            self.output = numpy.append(self.output,self.neurons[x].output,axis=None)
-            
+            numpy.append(self.output,self.neurons[x].calc_output(inputs))
+
     def back_prop(self,toChange):
         pass
         ##Todo

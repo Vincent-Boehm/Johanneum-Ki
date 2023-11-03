@@ -7,13 +7,8 @@ import math
 class neuron:
     
     def __init__(self) -> None:
+        self.weights = numpy.random.uniform(-2,2,(180))
         
-        self.weight = random.uniform(0.5,1.5)
-
-        self.bias = random.uniform(-1,1)
-
-        self.output = 0
-        
-    def calc_output(self,input:float):
-        
-        self.output =  1/(1 + math.e ** -(self.weight * input + self.bias))
+    def calc_output(self,input:numpy.ndarray) -> float:
+        input = input.flatten()
+        return  1/(1 + math.e ** -(numpy.dot(self.weights,input)))

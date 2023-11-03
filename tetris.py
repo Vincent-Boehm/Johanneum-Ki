@@ -26,63 +26,21 @@ pyboy = PyBoy(gamerom_file="Tetris.gb",game_wrapper=True)
 tetris = pyboy.game_wrapper()
 tetris.start_game()
 
-testNetwork = network.network(2304, 4)
+pyboy.set_emulation_speed(0)
 
+testNetwork = network.network(5, 3)
 
-
-# fig, ax = plt.subplots()
-
-    
-# plt.show()
-
-
-# frames = 0
-
-
-# line1, = ax.plot(0, 0)
 while not pyboy.tick():
     
-   # frames += 1
+    buffer = np.array( tetris.game_area())
     
-    buffer = pyboy.botsupport_manager().screen().screen_ndarray()
+    buffer = (buffer-np.min(buffer))/(np.max(buffer)-np.min(buffer))
     
-    pyboy.set_emulation_speed(3)
-    
-    buffer = buffer.reshape(buffer.shape[0]*buffer.shape[1],buffer.shape[2])
-    
-    
-    buffer = buffer[1::10]
-    
+    buffer = buffer.flatten()
     
     testNetwork.calcNetworkOutput(buffer)
     
-    outputRight = outPutNeuron.neuron()
-    outputLeft = outPutNeuron.neuron()
-    outputDown = outPutNeuron.neuron()
-    outputA = outPutNeuron.neuron()
-    
-    
-    outputRight.calc_output(testNetwork.hiddenLayers[-1].output)
-    outputLeft.calc_output(testNetwork.hiddenLayers[-1].output)
-    outputDown.calc_output(testNetwork.hiddenLayers[-1].output)
-    outputA.calc_output(testNetwork.hiddenLayers[-1].output)
-    
-    # # line1.set_xdata(frames)
-    # # line1.set_ydata(outputRight.output.mean())
-    # # plt.ion()
-    
-    # fig.canvas.draw()
-    
-    
-    
-    if outputRight.output.mean() > 0.5:
-        pyboy.send_input(WindowEvent.PRESS_ARROW_RIGHT)
-    if outputLeft.output.mean() > 0.5:
-        pyboy.send_input(WindowEvent.PRESS_ARROW_LEFT)
-    if outputDown.output.mean() > 0.5:
-        pyboy.send_input(WindowEvent.PRESS_ARROW_DOWN)
-    if outputA.output.mean() > 0.5:
-        pyboy.send_input(WindowEvent.PRESS_BUTTON_A)
+    print(testNetwork.output)
 
         
 pyboy.stop()
