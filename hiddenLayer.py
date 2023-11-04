@@ -27,6 +27,7 @@ class layer:
             self.output = numpy.append(self.output,self.neurons[x].calc_output(inputs))
 
         
-    def back_prop(self,toChange):
+    def train(self,learningrate):
+        for x in range(0,len(self.neurons)):
+            self.neurons[x].train(learningrate)
         pass
-        ##Todo

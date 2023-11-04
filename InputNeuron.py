@@ -12,4 +12,8 @@ class inputneuron:
     def calc_output(self,input:numpy.ndarray) -> float:
         input = input.flatten()
         
-        return  1/(1 + math.e ** -(numpy.dot(self.weights,input)))
+        return  numpy.tanh(numpy.dot(input,self.weights))
+
+    def train(self,learningrate):
+        
+        self.weights = self.weights + (numpy.random.uniform(-0.2,0.2,self.weights.shape) * learningrate)

@@ -44,4 +44,8 @@ class network:
         self.output.append(self.outputNeuron3.calc_output(self.hiddenLayers[-1].output))
         
         pass
+    def train(self,learningrate:float):
+        for x in range(len(self.hiddenLayers)):
+            self.hiddenLayers[x].train(learningrate)
+        pass
 

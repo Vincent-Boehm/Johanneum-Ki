@@ -30,14 +30,18 @@ tetris.start_game()
 pyboy.set_emulation_speed(0)
 
 if os.path.exists(networkName) == False:
-    testNetwork = network.network(4, 3)
+    testNetwork = network.network(10, 6)
 else:
-    with open(networkName,"r+") as file:
-        testNetwork = jsonpickle.decode(file.read)[0]
+    with open(networkName,"r") as file:
+        buffer = file.read()
+        testNetwork = jsonpickle.decode(buffer)
+        testNetwork = testNetwork[0]
         
 fig,ax = plt.subplots()
 
 ticks = 0
+
+iterations_since_boot = 0
 
 while not pyboy.tick():
     ticks += 1
@@ -80,16 +84,22 @@ while not pyboy.tick():
             with open(networkName,"r+") as file:
                 
                 toWrite = jsonpickle.decode(file.read())
+                
                 toWrite.append(testNetwork)
                 
-                toWrite.sort(key=lambda x: x.fitness)
+                toWrite.sort(key=lambda x: x.fitness,reverse=True)
                 
                 file.truncate(0)
-                
+                file.seek(0)
                 file.write(jsonpickle.encode(toWrite))
                 
                 testNetwork = toWrite[0]
-            
+                
+                
+        testNetwork.train(1)
+        
+        print(testNetwork.fitness)
+        ticks = 0
         tetris.reset_game(timer_div=0)
         
 pyboy.stop()
