@@ -13,8 +13,6 @@ class neuron:
     def calc_output(self,input:numpy.ndarray) -> float:
         input = input.flatten()
         
-        print(input)
-        
         return  numpy.tanh(numpy.dot(input,self.weights))
 
     def train(self,learningrate):

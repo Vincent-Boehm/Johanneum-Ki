@@ -20,7 +20,7 @@ from pyboy import PyBoy,WindowEvent, botsupport
 
 filename = "Tetris.gb"
 
-pyboy = PyBoy(gamerom_file="Tetris.gb",game_wrapper=True)
+pyboy = PyBoy(gamerom_file="Tetris.gb",game_wrapper=True,disable_renderer=False)
 
 networkName = "jarvis.json"
 
@@ -72,7 +72,9 @@ while not pyboy.tick():
         pyboy.send_input(WindowEvent.PRESS_BUTTON_A)
         
     if tetris.game_over():
-        testNetwork.fitness = tetris.score + (ticks / 6000)
+        testNetwork.fitness = tetris.score + (ticks / 60)
+        
+        print(testNetwork.fitness)
         
         if os.path.exists(networkName) == False:
             with open(networkName,"w+") as file:
@@ -94,11 +96,11 @@ while not pyboy.tick():
                 file.write(jsonpickle.encode(toWrite))
                 
                 testNetwork = toWrite[0]
+                print(testNetwork.fitness)
                 
                 
-        testNetwork.train(1)
+        testNetwork.train(2)
         
-        print(testNetwork.fitness)
         ticks = 0
         tetris.reset_game(timer_div=0)
         
